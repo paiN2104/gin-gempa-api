@@ -16,6 +16,10 @@ func Init() *echo.Echo {
 	})
 	e.POST("/login", controllers.CheckLogin)
 	e.POST("/register", controllers.StoreUser)
+	e.POST("/comment", controllers.StoreComment)
+	e.GET("/comment", controllers.FetchAllComment)
+	e.DELETE("/comment/:id", controllers.DeleteComment)
+	e.GET("/gempa", controllers.FetchMoneyAPI)
 	// e.GET("/hash/:password", controllers.GenerateHashPassword)
 
 	// Routes with middleware
