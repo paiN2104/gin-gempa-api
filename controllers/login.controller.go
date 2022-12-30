@@ -52,11 +52,12 @@ func GenerateHashPassword(c echo.Context) error {
 }
 
 func StoreUser(c echo.Context) error {
+	name := c.FormValue("name")
 	username := c.FormValue("username")
 	password := c.FormValue("password")
 	email := c.FormValue("email")
 
-	res, err := models.Register(username, password, email)
+	res, err := models.Register(name, username, password, email)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{

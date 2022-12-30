@@ -9,6 +9,7 @@ import (
 
 type User struct {
     Id	   int    `json:"id"`
+    Name    string `json:"name"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
@@ -44,14 +45,14 @@ func CheckLogin(username, password string) (bool, error) {
     return true, nil
 }
 
-func Register(username, password, email string) (bool, error) {
+func Register(name, username, password, email string) (bool, error) {
 	con := db.CreateCon()
 
-	sqlStatement := "INSERT INTO users (username, password, email) VALUES (?, ?, ?)"
+	sqlStatement := "INSERT INTO users (name, username, password, email) VALUES (?, ?, ?, ?)"
 
 	hash, _ := helpers.HashPassword(password)
 
-	_, err := con.Exec(sqlStatement, username, hash, email)
+	_, err := con.Exec(sqlStatement, name, username, hash, email)
 
 	if err != nil {
 		fmt.Print("Query Error!")

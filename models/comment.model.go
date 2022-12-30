@@ -27,7 +27,9 @@ type Comment struct {
 // 	return arrobj, err
 // }
 
-func addComment(comment string, userId int) (bool, error) {
+func StoreComment(comment string, userId string) (Response, error) {
+	var res Response
+
 	con := db.CreateCon()
 
 	sqlStatement := "INSERT INTO comments (comment, user_id) VALUES (?, ?)"
@@ -36,13 +38,13 @@ func addComment(comment string, userId int) (bool, error) {
 
 	if err != nil {
 		fmt.Print("Query Error!")
-		return false, err
+		return res, err
 	}
 
-	return true, nil
+	return res, nil
 }
 
-func GetComments() (Response, error) {
+func GetAllComments() (Response, error) {
 	var obj Comment
 	var arrobj []Comment
 	var res Response
@@ -69,6 +71,38 @@ func GetComments() (Response, error) {
 	res.Status = http.StatusOK
 	res.Message = "Success"
 	res.Data = arrobj
+
+	return res, nil
+}
+
+func DeleteComment(id string) (Response, error) {
+	var res Response
+
+	con := db.CreateCon()
+
+	sqlStatement := "DELETE FROM comments WHERE id = ?"
+
+	stmt, err := con.Prepare(sqlStatement)
+
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(id)
+
+	if (err != nil) {
+		return res, err
+	}
+	rowAffected, err:= result.RowsAffected()
+
+	if (err != nil) {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Success"
+	res.Data = map[string]int64{
+		"row_affected": rowAffected,
+	}
 
 	return res, nil
 }
