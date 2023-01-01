@@ -15,7 +15,36 @@ type User struct {
 	Email    string `json:"email"`
 }
 
-func CheckLogin(username, password string) (bool, error) {
+func FetchLogin() ([]User, error) {
+    var obj User
+    var arrobj []User
+
+    con := db.CreateCon()
+
+    sqlStatement := "SELECT * FROM users"
+
+    rows, err := con.Query(sqlStatement)
+
+    if err != nil {
+        return arrobj, err
+    }
+
+    defer rows.Close()
+
+    for rows.Next() {
+        err = rows.Scan(&obj.Id, &obj.Name, &obj.Username, &obj.Password, &obj.Email)
+
+        if err != nil {
+            return arrobj, err
+        }
+
+        arrobj = append(arrobj, obj)
+    }
+
+    return arrobj, nil
+}
+
+func CheckLogin(username string, password string,email string) (bool, error) {
     var obj User
     var pwd string
 
@@ -45,14 +74,14 @@ func CheckLogin(username, password string) (bool, error) {
     return true, nil
 }
 
-func Register(name, username, password, email string) (bool, error) {
+func Register(name string, username string, password string, email string,status string,image string) (bool, error) {
 	con := db.CreateCon()
 
-	sqlStatement := "INSERT INTO users (name, username, password, email) VALUES (?, ?, ?, ?)"
+	sqlStatement := "INSERT INTO users (name, username, password, email, status, image) VALUES (?, ?, ?, ?, ?, ?)"
 
 	hash, _ := helpers.HashPassword(password)
 
-	_, err := con.Exec(sqlStatement, name, username, hash, email)
+	_, err := con.Exec(sqlStatement, name, username, hash, email, status, image)
 
 	if err != nil {
 		fmt.Print("Query Error!")

@@ -12,7 +12,7 @@ import (
 type Comment struct {
 	Id        int       `json:"id"`
 	Comment   string    `json:"comment"`
-	userId	int       `json:"user_id"`
+	UserId    int       `json:"user_id"`
 }
 
 // func GetComments() ([]Comment, error) {
@@ -62,7 +62,7 @@ func GetAllComments() (Response, error) {
 	}
 
 	for rows.Next() {
-		if err := rows.Scan(&obj.Id, &obj.Comment, &obj.userId); err != nil {
+		if err := rows.Scan(&obj.Id, &obj.Comment, &obj.UserId); err != nil {
 			return res, err
 		}
 		arrobj = append(arrobj, obj)

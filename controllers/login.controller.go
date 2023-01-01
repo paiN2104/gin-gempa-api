@@ -9,12 +9,26 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
+//get login data
+func FetchLogin(c echo.Context) error {
+	res, err := models.FetchLogin()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
 
 func CheckLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
+	email := c.FormValue("email")
 
-	res, err := models.CheckLogin(username, password)
+	res, err := models.CheckLogin(username, password, email)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -56,8 +70,10 @@ func StoreUser(c echo.Context) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
 	email := c.FormValue("email")
+	status := c.FormValue("status")
+	image := c.FormValue("image")
 
-	res, err := models.Register(name, username, password, email)
+	res, err := models.Register(name, username, password, email, status, image)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{

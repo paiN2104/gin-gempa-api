@@ -15,11 +15,13 @@ func Init() *echo.Echo {
 		return c.String(http.StatusOK, "Hello, Guys!")
 	})
 	e.POST("/login", controllers.CheckLogin)
+	e.GET("/logindata", controllers.FetchLogin)
 	e.POST("/register", controllers.StoreUser)
 	e.POST("/comment", controllers.StoreComment)
 	e.GET("/comment", controllers.FetchAllComment)
 	e.DELETE("/comment/:id", controllers.DeleteComment)
-	e.GET("/gempa", controllers.FetchMoneyAPI)
+	e.GET("/gempa", controllers.FetchGempaDirasakanApi)
+	e.GET("/gempaterkini", controllers.FetchGempaTerkiniApi)
 	// e.GET("/hash/:password", controllers.GenerateHashPassword)
 
 	// Routes with middleware
