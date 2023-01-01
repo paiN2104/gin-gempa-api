@@ -44,34 +44,36 @@ func FetchLogin() ([]User, error) {
     return arrobj, nil
 }
 
-func CheckLogin(username string, password string,email string) (bool, error) {
+func CheckLogin(email string, password string) (int, error) {
     var obj User
     var pwd string
+    var id int
 
     con := db.CreateCon()
 
-    sqlStatement := "SELECT * FROM users WHERE username = ?"
+    sqlStatement := "SELECT * FROM users WHERE email = ?"
 
-    err := con.QueryRow(sqlStatement, username).Scan(&obj.Id, &obj.Username, &pwd, &obj.Email)
+    err := con.QueryRow(sqlStatement, email).Scan(&obj.Id, &obj.Username, &pwd, &obj.Email)
 
     if err == sql.ErrNoRows{
-        fmt.Print("Username not found!") //dont show in production env
-        return false, err
+        fmt.Print("Email not found!") //dont show in production env
+        return 0, err
     }
 
     if err != nil {
         fmt.Print("Query Error!")
-        return false, err
+        return 0, err
     }
 
     match, err := helpers.CheckPasswordHash(password, pwd)
 
     if !match{
         fmt.Print("Hash and Password not match!")
-        return false, err
+        return 0, err
     }
+    id = obj.Id
 
-    return true, nil
+    return id, nil
 }
 
 func Register(name string, username string, password string, email string,status string,image string) (bool, error) {

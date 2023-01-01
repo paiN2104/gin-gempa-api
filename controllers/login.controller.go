@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"time"
+	// "time"
 	"api_gempa/helpers"
 	"api_gempa/models"
 
-	"github.com/dgrijalva/jwt-go"
+	// "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
 //get login data
@@ -24,11 +24,10 @@ func FetchLogin(c echo.Context) error {
 
 
 func CheckLogin(c echo.Context) error {
-	username := c.FormValue("username")
 	password := c.FormValue("password")
 	email := c.FormValue("email")
 
-	res, err := models.CheckLogin(username, password, email)
+	res, err := models.CheckLogin(email, password)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -36,25 +35,24 @@ func CheckLogin(c echo.Context) error {
 		})
 	}
 
-	if !res{
-		return echo.ErrUnauthorized
-	}
+	// if !res{
+	// 	return echo.ErrUnauthorized
+	// }
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = username
-	claims["level"] = "application"
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	// token := jwt.New(jwt.SigningMethodHS256)
+	// claims := token.Claims.(jwt.MapClaims)
+	// claims["level"] = "application"
+	// claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
-	mytoken, err := token.SignedString([]byte("secretsauce"))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
-	}
+	// mytoken, err := token.SignedString([]byte("secretsauce"))
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
+	// }
 
 	return c.JSON(http.StatusOK,
-		map[string]string{
+		map[string]interface{}{
+			"id": res,
 			"message": "Login successful",
-			"token": mytoken,
 		})
 }
 
