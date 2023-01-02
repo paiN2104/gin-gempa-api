@@ -24,8 +24,8 @@ func FetchLogin(c echo.Context) error {
 
 
 func CheckLogin(c echo.Context) error {
-	password := c.FormValue("password")
 	email := c.FormValue("email")
+	password := c.FormValue("password")
 
 	res, err := models.CheckLogin(email, password)
 

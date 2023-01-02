@@ -13,6 +13,8 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
+    Status string `json:"status"`
+    Image string `json:"image"`
 }
 
 func FetchLogin() ([]User, error) {
@@ -53,7 +55,7 @@ func CheckLogin(email string, password string) (int, error) {
 
     sqlStatement := "SELECT * FROM users WHERE email = ?"
 
-    err := con.QueryRow(sqlStatement, email).Scan(&obj.Id, &obj.Username, &pwd, &obj.Email)
+    err := con.QueryRow(sqlStatement, email).Scan(&obj.Id, &obj.Name, &obj.Username, &pwd, &obj.Email, &obj.Status, &obj.Image)
 
     if err == sql.ErrNoRows{
         fmt.Print("Email not found!") //dont show in production env
