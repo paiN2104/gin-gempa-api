@@ -15,7 +15,7 @@ func Init() *echo.Echo {
 		return c.String(http.StatusOK, "Hello, Guys!")
 	})
 	e.POST("/login", controllers.CheckLogin)
-	e.GET("/logindata", controllers.FetchLogin)
+	e.GET("/login/:id", controllers.FetchLoginById)
 	e.POST("/register", controllers.StoreUser)
 	e.POST("/comment", controllers.StoreComment)
 	e.GET("/comment", controllers.FetchAllComment)

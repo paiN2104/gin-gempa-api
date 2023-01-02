@@ -17,6 +17,62 @@ type User struct {
     Image string `json:"image"`
 }
 
+//get data by id
+func FetchUserById(id string) (User, error) {
+    var obj User
+
+    con := db.CreateCon()
+
+    sqlStatement := "SELECT * FROM users WHERE id = ?"
+
+    rows := con.QueryRow(sqlStatement, id)
+
+    err := rows.Scan(&obj.Id, &obj.Name, &obj.Username, &obj.Password, &obj.Email, &obj.Status, &obj.Image)
+
+    if err != nil {
+        return obj, err
+    }
+
+    return obj, nil
+}
+    
+
+//get data by id
+// func FetchUserById(id string) (Response, error) {
+// 	var obj User
+// 	var arrObj []User
+// 	var res Response
+
+// 	con := db.CreateCon()
+
+// 	sqlStatement := "SELECT * FROM users WHERE id = ?"
+
+// 	rows, err := con.Query(sqlStatement, id)
+
+// 	defer rows.Close()
+
+// 	if err != nil {
+// 		return res, err
+// 	}
+
+// 	for rows.Next() {
+// 		err = rows.Scan(&obj.Id, &obj.Name, &obj.Username, &obj.Password, &obj.Email, &obj.Status, &obj.Image)
+
+// 		if err != nil {
+// 			return res, err
+// 		}
+
+// 		arrObj = append(arrObj, obj)
+// 	}
+
+// 	res.Status = 200
+// 	res.Message = "Success"
+// 	res.Data = arrObj
+
+// 	return res, nil
+// }
+
+
 func FetchLogin() ([]User, error) {
     var obj User
     var arrobj []User
@@ -34,7 +90,7 @@ func FetchLogin() ([]User, error) {
     defer rows.Close()
 
     for rows.Next() {
-        err = rows.Scan(&obj.Id, &obj.Name, &obj.Username, &obj.Password, &obj.Email)
+        err = rows.Scan(&obj.Id, &obj.Name, &obj.Username, &obj.Password, &obj.Email, &obj.Status, &obj.Image)
 
         if err != nil {
             return arrobj, err

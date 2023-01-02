@@ -9,6 +9,23 @@ import (
 	// "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
+
+//get login data by id
+func FetchLoginById(c echo.Context) error {
+
+	id := c.Param("id")
+
+	result, err := models.FetchUserById(id)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError,
+			map[string]string{"message": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+
+}
+
 //get login data
 func FetchLogin(c echo.Context) error {
 	res, err := models.FetchLogin()
