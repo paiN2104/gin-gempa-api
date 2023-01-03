@@ -16,6 +16,7 @@ func Init() *echo.Echo {
 	})
 	e.POST("/login", controllers.CheckLogin)
 	e.GET("/login/:id", controllers.FetchLoginById)
+	e.PATCH("/update", controllers.UpdateUser)
 	e.POST("/register", controllers.StoreUser)
 	e.POST("/comment", controllers.StoreComment)
 	e.GET("/comment", controllers.FetchAllComment)

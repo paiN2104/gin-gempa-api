@@ -1,6 +1,8 @@
 package helpers
 
-import(
+import (
+	"strconv"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,3 +18,13 @@ func CheckPasswordHash(password, hash string) (bool, error) {
 	}
 	return true, nil
 }
+
+// convert string to int
+func ConvertStringToInt(str string) int {
+	i, err := strconv.Atoi(str)
+	if err != nil {
+	 // handle error
+	 return 0
+	}
+	return i
+   }

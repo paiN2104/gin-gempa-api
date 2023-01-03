@@ -150,3 +150,19 @@ func Register(name string, username string, password string, email string,status
 
 	return true, nil
 }
+
+//update user by id
+func UpdateUser(id int, name string, username string, password string, email string, status string, image string) (bool, error) {
+    con := db.CreateCon()
+
+    sqlStatement := "UPDATE users SET name = ?, username = ?, password = ?, email = ?, status = ?, image = ? WHERE id = ?"
+
+    _, err := con.Exec(sqlStatement, name, username, password, email, status, image, id)
+
+    if err != nil {
+        fmt.Print("Query Error!")
+        return false, err
+    }
+
+    return true, nil
+}

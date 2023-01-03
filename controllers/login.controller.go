@@ -105,3 +105,41 @@ func StoreUser(c echo.Context) error {
 			"message": "Register successful",
 		})
 }
+
+//update user by id
+func UpdateUser(c echo.Context) error {
+	id := helpers.ConvertStringToInt(c.FormValue("id"))
+	name := c.FormValue("name")
+	username := c.FormValue("username")
+	password := c.FormValue("password")
+	email := c.FormValue("email")
+	status := c.FormValue("status")
+	image := c.FormValue("image")
+
+	var pwd = password
+
+	pass, err := helpers.HashPassword(pwd)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+
+	res, err := models.UpdateUser(id, name, username, pass, email, status, image)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+
+	if !res{
+		return echo.ErrUnauthorized
+	}
+
+	return c.JSON(http.StatusOK,
+		map[string]string{
+			"message": "Update successful",
+		})
+}
