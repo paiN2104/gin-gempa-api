@@ -23,6 +23,8 @@ func Init() *echo.Echo {
 	e.DELETE("/comment/:id", controllers.DeleteComment)
 	e.GET("/gempa", controllers.FetchGempaDirasakanApi)
 	e.GET("/gempaterkini", controllers.FetchGempaTerkiniApi)
+	e.GET("/gempahis", controllers.FetchAllGempaHis)
+	e.POST("/gempahis", controllers.StoreGempaHis)
 	// e.GET("/hash/:password", controllers.GenerateHashPassword)
 
 	// Routes with middleware

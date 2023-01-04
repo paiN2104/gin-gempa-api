@@ -13,6 +13,7 @@ type Comment struct {
 	Id        int       `json:"id"`
 	Comment   string    `json:"comment"`
 	UserId    int       `json:"user_id"`
+	Name	string		`json:"name"`
 }
 
 // func GetComments() ([]Comment, error) {
@@ -46,12 +47,14 @@ func StoreComment(comment string, userId string) (Response, error) {
 
 func GetAllComments() (Response, error) {
 	var obj Comment
+	// var objUser User
 	var arrobj []Comment
+	// var arrobjUser []User
 	var res Response
 
 	con := db.CreateCon()
 
-	sqlStatement := "SELECT * FROM comments"
+	sqlStatement := "SELECT a.name,b.comment,b.id,b.user_id FROM users a, comments b WHERE a.id = b.user_id ORDER BY b.id DESC LIMIT 10"
 
 	rows, err := con.Query(sqlStatement)
 	
@@ -62,10 +65,11 @@ func GetAllComments() (Response, error) {
 	}
 
 	for rows.Next() {
-		if err := rows.Scan(&obj.Id, &obj.Comment, &obj.UserId); err != nil {
+		if err := rows.Scan(&obj.Name, &obj.Comment ,&obj.Id, &obj.UserId); err != nil {
 			return res, err
 		}
 		arrobj = append(arrobj, obj)
+		// arrobjUser = append(arrobjUser)
 	}
 
 	res.Status = http.StatusOK
